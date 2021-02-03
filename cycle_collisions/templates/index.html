@@ -1,0 +1,118 @@
+<html>
+    <head>
+        {% block css_block %}{% endblock %}
+        {% load static %}
+        <title>Simple Map</title>
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+        <script src="https://unpkg.com/@google/markerclustererplus@4.0.1/dist/markerclustererplus.min.js"></script>
+        <script
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDA5OKHN5Doymua61MOQFSqCgimdmvv3sg&callback=initMap&libraries=&v=weekly&libraries=geometry"
+          defer
+        ></script>
+        <link rel="stylesheet" href="{% static 'css/style.css' %}">
+        <script type="text/javascript">
+          function initMap() {
+            const bounds = new google.maps.LatLngBounds();
+              map = new google.maps.Map(document.getElementById("map"), {
+                center: new google.maps.LatLng( 40.71274, -74.005974 ),
+                zoom: 10,
+              });
+            
+              const cyclist_labels = "IC";
+
+              var i;
+              var c;
+              const crash_locs = [];
+              const bike_station_locs = [];
+
+              for (i = 0; i < locations.length; i++) {
+                  for (c = 0; c < locations[i].length; c++){
+                      crash_locs.push({"lat":Number(locations[i][c].lat), "lng":Number(locations[i][c].lng)});
+                  }
+              }
+              var ind;
+              for (ind = 0; ind < bike_stations.length; ind++) {
+                bike_station_locs.push({"lat":Number(bike_stations[ind].lat), "lng":Number(bike_stations[ind].lng)});
+            }
+              var markers = [];
+              const image =
+                   "http://maps.gstatic.com/mapfiles/ms2/micons/cycling.png";
+              const crash_markers = crash_locs.map((crash_loc, i) => {
+                return new google.maps.Marker({
+                  position: crash_loc,
+                  label: cyclist_labels,
+                  
+                });
+ 
+              });
+              const citi_bike_marker = bike_station_locs.map((bike_station_locs, i) => {
+                return new google.maps.Marker({
+                  position: bike_station_locs,
+                  icon: image,
+                  clickable:true
+                  
+                });
+ 
+              });                
+
+            
+              // Add a marker clusterer to manage the markers.
+              new MarkerClusterer(map, citi_bike_marker, {
+                imagePath:
+                  "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
+              });
+              new MarkerClusterer(map, crash_markers, {
+                imagePath:
+                  "https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m",
+              });
+
+              var service = new google.maps.DistanceMatrixService();
+            
+
+              marker.addListener("click", () => {
+                map.setZoom(7);
+                map.setCenter(marker.getPosition());
+                
+              });
+              
+            }
+            
+            var data_db =  '{{boroughs|safe}}';
+            var data = [JSON.parse(data_db)];
+            
+            const locations = [];
+            var len = data[0].length;
+            for (i = 0; i < len; i++) {
+              locations.push(data[0][i]);
+          }
+          const bike_stations = locations[1];
+          locations.pop()
+        
+       </script>
+            
+    </head>
+    <body>
+    <h1 class="text-center	">Cycle Accidents NYC</h1>
+    <div class="container">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          That Map below displays the Bike Accidents in each borough. <br>
+          The bike icon indicates a Citi Bike Station and the Red Marker IC 'Injured Cyclist'.<br>
+          You can search by borough by adding the the following query param to the URL above.<br>
+          ?="borough_name". For Example: ?borough=QUEENS
+
+        </div>
+      </div>
+      <div id="map">
+    </div>
+    </div>
+    
+    </body></html>
