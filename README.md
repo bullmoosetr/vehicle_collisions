@@ -35,5 +35,5 @@ Load the boroughs
 Next, Load the crash infromation
 `get_nyc_collision_data.add_data_to_db()`
 The last script take time due to the large amount of data being iterated so please be patient
-`get_nyc_collision_data.get_citi_bike_data_and_add_to_db()`
+`get_nyc_collision_data.get_citi_bike_data_and_add_to_db(borough='QUEENS')`
 This take a few minutes but onece completed it will return quersets with sorted data
