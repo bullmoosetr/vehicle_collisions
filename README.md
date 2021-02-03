@@ -18,22 +18,22 @@ add the api key to 'src="https://maps.googleapis.com/maps/api/js?key=API_KEY&cal
 '
 #### Step Three
 Build The Docker Container
-'docker-compose build'
+`docker-compose build`
 
 #### Step Four
 Run the Container when it is built
-'docker-compose up -d'
+`docker-compose up -d`
 
 #### Step Five
 Last step is we need to load the data to our database. We need to access the shell and run some functions
-'docker exec -it vehicle_collisions_web_1 bash' this will acces the bash termiaal
-'python manage.py shell' access django shell
+`docker exec -it vehicle_collisions_web_1 bash` this will acces the bash termiaal
+`python manage.py shell` access django shell
 Run the following carefully 
-'from cycle_collisions.nyc_collision_data import get_nyc_collision_data'
+`from cycle_collisions.nyc_collision_data import get_nyc_collision_data`
 Load the boroughs
-'get_nyc_collision_data.add_boroughs_to_db()'
+`get_nyc_collision_data.add_boroughs_to_db()`
 Next, Load the crash infromation
-'get_nyc_collision_data.add_data_to_db()'
+`get_nyc_collision_data.add_data_to_db()`
 The last script take time due to the large amount of data being iterated so please be patient
-'get_nyc_collision_data.get_citi_bike_data_and_add_to_db()'
+`get_nyc_collision_data.get_citi_bike_data_and_add_to_db()`
 This take a few minutes but onece completed it will return quersets with sorted data
