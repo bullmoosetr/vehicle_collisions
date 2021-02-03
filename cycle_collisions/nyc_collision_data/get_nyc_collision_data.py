@@ -16,7 +16,7 @@ def get_collision_data_nyc(borough, date_range=None):
     client = Socrata("data.cityofnewyork.us", None)
 
     if borough:
-        results = client.get("h9gi-nx95", borough=borough, limit=2000, where="crash_date between '2019-01-01T00:00:00' and '2019-12-12T00:00:00'", )
+        results = client.get("h9gi-nx95", borough=borough, limit=3000, where="crash_date between '2019-01-01T00:00:00' and '2019-12-12T00:00:00'", )
         df = pd.DataFrame.from_records(results)
         return df[df['number_of_cyclist_injured'] != "0"]
     
